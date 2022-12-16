@@ -15,3 +15,7 @@ export default function AddExpensesPage() {
     </Modal>
   )
 }
+
+export function action() {
+  
+}
