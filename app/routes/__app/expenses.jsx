@@ -1,7 +1,6 @@
 import { Outlet } from "@remix-run/react";
 
 import ExpensesList from "~/components/expenses/ExpensesList";
-import ExpensesStyles from '~/styles/expenses.css';
 
 const EXPENSES_DUMMY = [
   {
@@ -25,8 +24,4 @@ export default function ExpensesLayout() {
       <ExpensesList expenses={EXPENSES_DUMMY}/>
     </main>
   </>
-}
-
-export function links() {
-  return [{ rel: 'stylesheet', href: ExpensesStyles }];
 }
