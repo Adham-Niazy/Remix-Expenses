@@ -22,19 +22,19 @@ function ExpenseStatistics({ expenses }) {
       <dl id="expense-statistics">
         <div>
           <dt>Total</dt>
-          <dd>${sum.toFixed(2)}</dd>
+          <dd>EGP {sum.toFixed(2)}</dd>
         </div>
         <div>
           <dt>Average</dt>
-          <dd>${mean.toFixed(2)}</dd>
+          <dd>EGP {mean.toFixed(2)}</dd>
         </div>
         <div>
           <dt> Min. Amount</dt>
-          <dd>${minAmount.toFixed(2)}</dd>
+          <dd>EGP {minAmount.toFixed(2)}</dd>
         </div>
         <div>
           <dt>Max. Amount</dt>
-          <dd>${maxAmount.toFixed(2)}</dd>
+          <dd>EGP {maxAmount.toFixed(2)}</dd>
         </div>
       </dl>
     </section>

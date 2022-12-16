@@ -14,7 +14,7 @@ const PRICING_PLANS = [
   {
     id: 'p2',
     title: 'Pro',
-    price: '$9.99/month',
+    price: 'EGP 149.99/month',
     perks: ['Unlimited Users', 'Unlimited expenses/year', 'Detailed analytics'],
     icon: FaTrophy
   },
