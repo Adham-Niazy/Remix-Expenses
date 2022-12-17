@@ -1,17 +1,27 @@
-import { Form, Link, useActionData, useTransition as useNavigation } from "@remix-run/react";
+import { Form, Link, useActionData, useMatches, useTransition as useNavigation } from "@remix-run/react";
 
 function ExpenseForm() {
-  const today = new Date().toISOString().slice(0, 10);
+  // Required Hooks
   const validationErrors = useActionData();
+  const matches = useMatches();
   const navigation = useNavigation();
-
+  
+  const today = new Date().toISOString().slice(0, 10);
+  let expenseId = 0;
+  const expenses = matches.find(
+    (match) => {
+      expenseId = match.params.id;
+      return match.id === 'routes/__app/expenses';
+    }
+  ).data;
+  const expenseData = expenses.find(expense => expense.id === expenseId) || { title: '', amount: '', date: '' };
   const isSubmitting = navigation.state !== 'idle';
 
   return (
     <Form method="post" className="form" id="expense-form">
       <p>
         <label htmlFor="title">Expense Title</label>
-        <input type="text" id="title" name="title" required maxLength={30} />
+        <input type="text" id="title" name="title" required maxLength={30} defaultValue={expenseData?.title} />
       </p>
 
       <div className="form-row">
@@ -24,11 +34,18 @@ function ExpenseForm() {
             min="0"
             step="0.01"
             required
+            defaultValue={expenseData?.amount}
           />
         </p>
         <p>
           <label htmlFor="date">Date</label>
-          <input type="date" id="date" name="date" max={today} required />
+          <input
+            type="date"
+            id="date"
+            name="date"
+            max={today}
+            required
+            defaultValue={expenseData.date ? expenseData.date.slice(0, 10) : ''} />
         </p>
       </div>
       {validationErrors && <ul>
