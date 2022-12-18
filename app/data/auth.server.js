@@ -49,6 +49,14 @@ export async function getUserFromSession(request) {
   return userId;
 }
 
+export async function requireUserSession(request) {
+  const userId = await getUserFromSession(request);
+  if (!userId) {
+    throw redirect('/auth?mode=login');
+  }
+  return userId;
+}
+
 export async function signup({ email, password }) {
   // Checking Uniqueness of email
   const existingUser = await prisma.user.findFirst({ where: { email } });
