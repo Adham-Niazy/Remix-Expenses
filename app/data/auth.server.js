@@ -30,6 +30,25 @@ function throwError(message, status) {
   throw error;
 }
 
+export async function destroyUserSession(request) {
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+
+
+  return redirect('/', {
+    headers: {
+      'Set-Cookie': await sessionStorage.destroySession(session)
+    }
+  })
+}
+
+export async function getUserFromSession(request) {
+  const session = await sessionStorage.getSession(request.headers.get('Cookie'));
+  const userId = session.get('userId');
+
+  if (!userId) return null;
+  return userId;
+}
+
 export async function signup({ email, password }) {
   // Checking Uniqueness of email
   const existingUser = await prisma.user.findFirst({ where: { email } });
