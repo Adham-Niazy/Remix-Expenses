@@ -12,6 +12,8 @@ export async function action({ request }) {
   const formData = await request.formData();
   const userData = Object.fromEntries(formData);
 
+  // Validate User Input
+
   if ( authMode === 'login' ) {
     // Login Logic
   } else {
