@@ -2,7 +2,7 @@ import { prisma } from "./database.server";
 
 function handlingError(err) {
   console.log(err);
-  throw err;
+  throw new Error("Your action couldn't be completed, please try again later.");
 }
 
 export async function addExpense(expenseData) {
