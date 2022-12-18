@@ -34,9 +34,10 @@ export async function action({ request, params }) {
     const formData = await request.formData();
     const expenseData = Object.fromEntries(formData);
 
-    await handlePatchRequest(expenseId, expenseData)
+    await handlePatchRequest(expenseId, expenseData);
+    return redirect('/expenses');
   } else if (request.method === 'DELETE') {
     await deleteExpense(expenseId);
+    return { deletedId: expenseId }
   }
-  return redirect('/expenses')
 }
