@@ -14,15 +14,16 @@ import SharedStyles from '~/styles/shared.css';
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Remix Expenses",
   viewport: "width=device-width,initial-scale=1",
+  description: 'Manage your expenses with ease! 💵💰',
 });
 
 function Document({ title, children }) {
   return (
     <html lang="en">
       <head>
-        <title>{title}</title>
+        {title && <title>{title}</title>}
         <Meta />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
