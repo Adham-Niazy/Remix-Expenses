@@ -1,9 +1,7 @@
-import { redirect } from '@remix-run/node';
-
 import AuthForm from '~/components/auth/AuthForm';
 import AuthStyles from '~/styles/auth.css';
 import { validateCredentials } from '~/data/validation.server';
-import { signup } from '~/data/auth.server';
+import { signup, login } from '~/data/auth.server';
 
 export default function AuthPage() {
   return <AuthForm />;
@@ -24,14 +22,15 @@ export async function action({ request }) {
 
   try {
     if (authMode === 'login') {
-      // Login Logic
+      return await login(userData);
     } else {
-      await signup(userData);
-      return redirect('/expenses');
+      return await signup(userData);
     }
   } catch (error) {
-    if (error.status === 422) {
+    if (error.status === 422 || error.status === 401) {
       return { credentials: error.message }
+    } else {
+      return { credentials: "An error occurred!" }
     }
   }
 }

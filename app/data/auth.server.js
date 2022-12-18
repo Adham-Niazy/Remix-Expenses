@@ -1,5 +1,28 @@
-import { prisma } from "./database.server";
 import { hash, compare } from 'bcryptjs';
+import { createCookieSessionStorage, redirect } from '@remix-run/node';
+
+import { prisma } from "./database.server";
+
+const SESSION_SECRET = process.env.SESSION_SECRET;
+const sessionStorage = createCookieSessionStorage({
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    secrets: [SESSION_SECRET],
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60, // A week
+    httpOnly: true
+  }
+});
+
+async function createUserSession(userId, redirectPath) {
+  const session = await sessionStorage.getSession();
+  session.set('userId', userId);
+  return redirect(redirectPath, {
+    headers: {
+      'Set-Cookie': await sessionStorage.commitSession(session)
+    }
+  })
+}
 
 function throwError(message, status) {
   const error = new Error(message);
@@ -15,7 +38,9 @@ export async function signup({ email, password }) {
   }
 
   const passwordHash = await hash(password, 12);
-  await prisma.user.create({ data: { email, password: passwordHash } })
+  const user = await prisma.user.create({ data: { email, password: passwordHash } });
+
+  return createUserSession(user.id, '/expenses')
 }
 
 export async function login({ email, password }) {
@@ -29,4 +54,6 @@ export async function login({ email, password }) {
   if (!passwordCorrect) {
     throwError('Could not log you in, please check the provided credentials.', 401);
   }
+
+  return createUserSession(existingUser.id, '/expenses')
 }
