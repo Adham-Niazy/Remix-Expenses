@@ -14,14 +14,18 @@ function ExpenseForm() {
       return match.id === 'routes/__app/expenses';
     }
   ).data;
-  const expenseData = expenses.find(expense => expense.id === expenseId) || { title: '', amount: '', date: '' };
+  const expenseData = expenses.find(expense => expense.id === expenseId);
   const isSubmitting = navigation.state !== 'idle';
+
+  if (expenseId && !expenseData) return <h4>Invalid Expense ID!!</h4>;
+
+  const defaultValues = expenseData || { title: '', amount: '', date: '' };
 
   return (
     <Form method={expenseData ? 'patch' : 'post'} className="form" id="expense-form">
       <p>
         <label htmlFor="title">Expense Title</label>
-        <input type="text" id="title" name="title" required maxLength={30} defaultValue={expenseData?.title} />
+        <input type="text" id="title" name="title" required maxLength={30} defaultValue={defaultValues?.title} />
       </p>
 
       <div className="form-row">
@@ -34,7 +38,7 @@ function ExpenseForm() {
             min="0"
             step="0.01"
             required
-            defaultValue={expenseData?.amount}
+            defaultValue={defaultValues?.amount}
           />
         </p>
         <p>
@@ -45,7 +49,7 @@ function ExpenseForm() {
             name="date"
             max={today}
             required
-            defaultValue={expenseData.date ? expenseData.date.slice(0, 10) : ''} />
+            defaultValue={defaultValues.date ? defaultValues.date.slice(0, 10) : ''} />
         </p>
       </div>
       {validationErrors && <ul>
