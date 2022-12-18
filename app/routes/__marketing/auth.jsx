@@ -1,5 +1,6 @@
 import AuthForm from '~/components/auth/AuthForm';
 import AuthStyles from '~/styles/auth.css';
+import { validateCredentials } from '~/data/validation.server';
 
 export default function AuthPage() {
   return <AuthForm />;
@@ -12,7 +13,11 @@ export async function action({ request }) {
   const formData = await request.formData();
   const userData = Object.fromEntries(formData);
 
-  // Validate User Input
+  try {
+    validateCredentials(userData);
+  } catch (e) {
+    return e;
+  }
 
   if ( authMode === 'login' ) {
     // Login Logic
