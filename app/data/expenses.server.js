@@ -5,13 +5,14 @@ function handlingError(err) {
   throw new Error("Your action couldn't be completed, please try again later.");
 }
 
-export async function addExpense(expenseData) {
+export async function addExpense(expenseData, userId) {
   try {
     return await prisma.expense.create({
       data: {
         title: expenseData.title,
         amount: +expenseData.amount,
-        date: new Date(expenseData.date)
+        date: new Date(expenseData.date),
+        user: { connect: { id: userId } }
       }
     })
   } catch (error) {
@@ -19,10 +20,11 @@ export async function addExpense(expenseData) {
   }
 }
 
-export async function getExpenses() {
+export async function getExpenses(userId) {
   try {
     return await prisma.expense.findMany(
       {
+        where: { userId },
         orderBy:
           { date: 'desc' }
       }
