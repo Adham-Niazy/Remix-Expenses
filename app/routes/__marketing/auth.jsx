@@ -38,3 +38,13 @@ export async function action({ request }) {
 export function links() {
   return [{ rel: 'stylesheet', href: AuthStyles }];
 }
+
+export function headers({
+  actionHeaders,
+  loaderHeaders,
+  parentHeaders
+}) {
+  return {
+    'Cache-Control': parentHeaders.get('Cache-Control') // 60 minutes
+  }
+}
